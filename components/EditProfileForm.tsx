@@ -62,11 +62,11 @@ export default function EditProfileForm() {
   })
 
   const handleChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }))
+    setFormData((prev: any) => ({ ...prev, [field]: value }))
   }
 
   const handleSocialChange = (platform: string, value: string) => {
-    setFormData(prev => ({
+    setFormData((prev: { socialLinks: any }) => ({
       ...prev,
       socialLinks: { ...prev.socialLinks, [platform]: value }
     }))
@@ -77,7 +77,7 @@ export default function EditProfileForm() {
       ...formData,
       skillsets: formData.skillsets
         .split(',')
-        .map(s => s.trim())
+        .map((s: string) => s.trim())
         .filter(Boolean)
     }
     updateMutation.mutate(dataToSend)
