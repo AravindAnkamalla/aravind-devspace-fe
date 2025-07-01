@@ -1,14 +1,14 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter, useParams } from 'next/navigation'
 import { useAuth } from '@clerk/nextjs'
 import { useQuery, useMutation } from '@tanstack/react-query'
 import axios from 'axios'
 
 export default function ProjectForm() {
-  const params = useSearchParams()
-  const id = params.get('id')
+  const params = useParams()
+  const id = params.id as String;
   const router = useRouter()
 
 
