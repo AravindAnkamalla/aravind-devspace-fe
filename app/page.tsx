@@ -2,20 +2,18 @@
 
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
-import { useAuth } from '@clerk/nextjs'
+
 import SkillBadges from '@/components/SkillBadges'
 import { FaGithub, FaLinkedin, FaInstagram } from 'react-icons/fa'
 
 export default function Home() {
-  const { getToken } = useAuth()
 
   const { data, isLoading } = useQuery({
     queryKey: ['profile'],
     queryFn: async () => {
-      const token = await getToken()
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/me`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      console.log('hii')
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/me`)
+      console.log(res)
       return res.data
     },
   })
@@ -67,7 +65,7 @@ export default function Home() {
             Skillsets
           </h2>
           <div className="flex flex-wrap gap-2">
-            <SkillBadges skills={data.skillsets} />
+            <SkillBadges skills={data?.skillsets} />
           </div>
         </div>
       </div>

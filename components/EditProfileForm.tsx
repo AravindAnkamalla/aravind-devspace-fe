@@ -13,22 +13,19 @@ export default function EditProfileForm() {
     name: '', bio: '', image: '', skillsets: '', socialLinks: { github: '', linkedin: '', instagram: '' }
   })
  const router = useRouter()
-  const { getToken, userId } = useAuth()
+ 
   const queryClient = useQueryClient()
 
   const {
     data: profileData,
     isLoading,
   } = useQuery({
-    queryKey: ['profile', userId],
+    queryKey: ['profile'],
     queryFn: async () => {
-      const token = await getToken()
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/me`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/me`, 
+      )
       return res.data
-    },
-    enabled: !!userId,
+    }
   })
 
   useEffect(() => {
@@ -45,16 +42,15 @@ export default function EditProfileForm() {
 
   const updateMutation = useMutation({
     mutationFn: async (updatedData) => {
-      const token = await getToken()
-      return axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/me`, updatedData, {
-        headers: { Authorization: `Bearer ${token}` }
-      })
+      
+      return axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/me`, updatedData
+      )
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['profile', userId] })
+      queryClient.invalidateQueries({ queryKey: ['profile'] })
 
       alert('Profile updated successfully')
-            router.replace('/profile')
+      router.back()
     },
     onError: () => {
       alert('Failed to update')

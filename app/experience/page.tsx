@@ -4,12 +4,11 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
 import ExperienceForm from '@/components/ExperienceForm'
 import ExperienceCard from '@/components/ExperienceCard'
-import { useAuth } from '@clerk/nextjs'
+
 import { useState } from 'react'
 
 
 export default function ExperiencePage() {
-  const { getToken } = useAuth()
   const queryClient = useQueryClient()
 
   const [editingExp, setEditingExp] = useState<any | null>(null)
@@ -17,12 +16,7 @@ export default function ExperiencePage() {
   const { data: experiences = [], isLoading } = useQuery({
     queryKey: ['experiences'],
     queryFn: async () => {
-      const token = await getToken()
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/experiences`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/experiences`)
       return res.data
     },
   })
@@ -30,18 +24,18 @@ export default function ExperiencePage() {
   // Upsert mutation
   const mutation = useMutation({
     mutationFn: async (formData: any) => {
-      const token = await getToken()
+      
       if (formData.id) {
         return axios.put(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/experiences/${formData.id}`,
-          formData,
-          { headers: { Authorization: `Bearer ${token}` } }
+          formData
+          
         )
       } else {
         return axios.post(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/experiences`,
-          formData,
-          { headers: { Authorization: `Bearer ${token}` } }
+          formData
+         
         )
       }
     },
@@ -55,12 +49,8 @@ export default function ExperiencePage() {
   // Delete experience
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const token = await getToken()
-      return axios.delete(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/experiences/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      
+      return axios.delete(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/experiences/${id}`)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['experiences'] })
@@ -72,7 +62,7 @@ export default function ExperiencePage() {
       <div className="max-w-4xl mx-auto p-6">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Past Experience</h2>
-          <button
+          {/* <button
             onClick={() => {
               setEditingExp(null)
               setShowForm(!showForm)
@@ -80,7 +70,7 @@ export default function ExperiencePage() {
             className="text-sm text-white bg-blue-600 px-4 py-2 rounded hover:bg-blue-700 transition"
           >
             {showForm ? 'Close Form' : 'Add Experience'}
-          </button>
+          </button> */}
         </div>
 
         {showForm && (

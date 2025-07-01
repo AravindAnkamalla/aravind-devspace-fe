@@ -10,7 +10,7 @@ export default function ProjectForm() {
   const params = useSearchParams()
   const id = params.get('id')
   const router = useRouter()
-  const { getToken } = useAuth()
+
 
   const [form, setForm] = useState({
     title: '',
@@ -26,10 +26,8 @@ export default function ProjectForm() {
     queryKey: ['project', id],
     enabled: !!id,
     queryFn: async () => {
-      const token = await getToken()
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/projects/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/projects/${id}`)
       return res.data
     },
     // onSuccess: (proj: any) => {
@@ -42,19 +40,16 @@ export default function ProjectForm() {
 
   const mutation = useMutation({
     mutationFn: async (dataPayload: any) => {
-      const token = await getToken()
       const payload = {
         ...dataPayload,
         techStacks: dataPayload.techStacks.split(',').map((s: string) => s.trim()),
       }
       if (id) {
-        return axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/projects/${id}`, payload, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
+        return axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/projects/${id}`, payload
+        )
       }
-      return axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/projects`, payload, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      return axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/projects`, payload
+      )
     },
     onSuccess: () => {
       router.push('/my-projects')

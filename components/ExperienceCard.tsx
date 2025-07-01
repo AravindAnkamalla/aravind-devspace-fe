@@ -54,18 +54,18 @@ export default function ExperienceCard({ experience, onEdit, onDelete }: Props) 
             </p>
           </div>
           <div className="flex gap-2 mt-1">
-            <button
+            {/* <button
               onClick={() => onEdit(id)}
               className="text-xs text-blue-600 hover:underline"
             >
               Edit
-            </button>
-            <button
+            </button> */}
+            {/* <button
               onClick={() => onDelete(id)}
               className="text-xs text-red-600 hover:underline"
             >
               Delete
-            </button>
+            </button> */}
           </div>
         </div>
 

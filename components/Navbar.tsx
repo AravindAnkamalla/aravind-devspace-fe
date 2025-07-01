@@ -11,9 +11,7 @@ export default function Navbar() {
         <Link href="/">Home</Link>
         <Link href="/my-projects">Projects</Link>
         <Link href="/experience">Experience</Link>
-        <Link href="/edit-profile">Edit Profile</Link>
-        <SignedIn><UserButton /></SignedIn>
-        <SignedOut><SignInButton /></SignedOut>
+        {/* <Link href="/edit-profile">Edit Profile</Link> */}
       </ul>
     </nav>
   )

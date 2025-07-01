@@ -5,23 +5,19 @@ import axios from 'axios'
 import { useParams } from 'next/navigation'
 import ProjectForm from '@/components/ProjectForm'
 import SkillBadges from '@/components/SkillBadges'
-import { useAuth } from '@clerk/nextjs'
+
 
 export default function ProjectDetailPage() {
   const params = useParams()
   const id = params.id as string
   console.log(id)
-  const { getToken } = useAuth()
-
+  
   const { data, isLoading, error } = useQuery({
     queryKey: ['project', id],
     queryFn: async () => {
-      const token = await getToken()
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/projects/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/projects/${id}`
+       )
       return res.data
     },
     enabled: !!id,
