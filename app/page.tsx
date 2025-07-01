@@ -1,63 +1,76 @@
-"use client";
+'use client'
 
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import Navbar from "@/components/Navbar";
-import { useAuth } from "@clerk/nextjs";
-import SkillBadges from "@/components/SkillBadges";
+import { useQuery } from '@tanstack/react-query'
+import axios from 'axios'
+import { useAuth } from '@clerk/nextjs'
+import SkillBadges from '@/components/SkillBadges'
+import { FaGithub, FaLinkedin, FaInstagram } from 'react-icons/fa'
 
 export default function Home() {
-  const { getToken } = useAuth();
-  const { data, isLoading } = useQuery({
-    queryKey: ["profile"],
-    queryFn: async () => {
-      const token = await getToken();
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/me`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log("++++++++", res.data);
-      return res.data;
-    },
-  });
+  const { getToken } = useAuth()
 
-  if (isLoading) return <p>Loading...</p>;
+  const { data, isLoading } = useQuery({
+    queryKey: ['profile'],
+    queryFn: async () => {
+      const token = await getToken()
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      return res.data
+    },
+  })
+
+  if (isLoading) return <p className="text-center text-gray-500">Loading...</p>
 
   return (
-    <>
-      <Navbar />
-      <div className="max-w-3xl mx-auto p-6">
-        <div className="flex flex-col items-center text-center">
-          <img
-            src={data?.image}
-            alt="Profile"
-            className="w-32 h-32 rounded-full mb-4"
-          />
-          <h1 className="text-3xl font-bold mb-2">{data?.name}</h1>
-          <p className="text-gray-600 dark:text-gray-300">{data?.bio}</p>
-          <div className="flex gap-4 mt-4">
-            <a href={data?.github} target="_blank">
-              GitHub
+    <div className="max-w-4xl mx-auto px-6 py-12">
+      <div className="flex flex-col items-center text-center dark:bg-gray-900  shadow-md p-8">
+        {/* Profile Image */}
+        <img
+          src={data?.image}
+          alt="Profile"
+          className="w-32 h-32 rounded-full shadow-md border-4 border-blue-500 object-cover mb-4"
+        />
+
+        {/* Name */}
+        <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">
+          {data?.name}
+        </h1>
+
+        {/* Bio */}
+        <p className="text-gray-600 dark:text-gray-300 max-w-2xl mb-4">
+          {data?.bio}
+        </p>
+
+        {/* Social Links */}
+        <div className="flex gap-6 mt-2 text-xl text-blue-600 dark:text-blue-400">
+          {data?.socialLinks?.github && (
+            <a href={data.socialLinks.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+              <FaGithub className="hover:text-blue-800 transition" />
             </a>
-            <a href={data?.linkedin} target="_blank">
-              LinkedIn
+          )}
+          {data?.socialLinks?.linkedin && (
+            <a href={data.socialLinks.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+              <FaLinkedin className="hover:text-blue-800 transition" />
             </a>
-            <a href={data?.instagram} target="_blank">
-              Instagram
+          )}
+          {data?.socialLinks?.instagram && (
+            <a href={data.socialLinks.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <FaInstagram className="hover:text-blue-800 transition" />
             </a>
-          </div>
-          <div className="mt-6">
-            <h2 className="text-xl font-semibold">Skills</h2>
-            <div className="flex flex-wrap gap-2 mt-2">
-              <SkillBadges skills={data.skillsets} />
-            </div>
+          )}
+        </div>
+
+        {/* Skills */}
+        <div className="w-full mt-8 text-left">
+          <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-2">
+            Skillsets
+          </h2>
+          <div className="flex flex-wrap gap-2">
+            <SkillBadges skills={data.skillsets} />
           </div>
         </div>
       </div>
-    </>
-  );
+    </div>
+  )
 }

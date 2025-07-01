@@ -6,7 +6,7 @@ import ExperienceForm from '@/components/ExperienceForm'
 import ExperienceCard from '@/components/ExperienceCard'
 import { useAuth } from '@clerk/nextjs'
 import { useState } from 'react'
-import Navbar from '@/components/Navbar'
+
 
 export default function ExperiencePage() {
   const { getToken } = useAuth()
@@ -69,7 +69,6 @@ export default function ExperiencePage() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-black">
-      <Navbar />
       <div className="max-w-4xl mx-auto p-6">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Past Experience</h2>
